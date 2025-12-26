@@ -1,0 +1,40 @@
+{
+  "name": "Fast-Chat",
+  "short_name": "Fast-Chat",
+  "description": "Application de chat rapide et simple par Luberisse Karl Brad",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#1EA7FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "fastchat.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "fastchat.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "communication"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Nouveau message",
+      "short_name": "Message",
+      "description": "Commencer une nouvelle conversation",
+      "url": "/",
+      "icons": [
+        {
+          "src": "fastchat.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

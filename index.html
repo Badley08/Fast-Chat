@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1EA7FF">
+    <title>Fast-Chat</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="fastchat.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fast-Chat">
+    <link rel="apple-touch-icon" href="fastchat.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="font-sans">
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <img src="fastchat.png" alt="Fast-Chat Logo" class="splash-logo">
+            <h1 class="splash-title">Fast-Chat</h1>
+            <p class="splash-subtitle">by Luberisse Karl Brad</p>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="hidden">
+        <!-- Auth Screen -->
+        <div id="authScreen" class="auth-screen">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <img src="fastchat.png" alt="Fast-Chat Logo" class="auth-logo">
+                    <h1 class="auth-title">Fast-Chat</h1>
+                    <p class="auth-description">Chattez rapidement et simplement</p>
+                </div>
+
+                <!-- Auth Mode Selector -->
+                <div class="auth-mode-selector">
+                    <button id="authModeEmail" class="auth-mode-btn active" data-mode="email">
+                        Email
+                    </button>
+                    <button id="authModePhone" class="auth-mode-btn" data-mode="phone">
+                        Téléphone
+                    </button>
+                    <button id="authModeGoogle" class="auth-mode-btn" data-mode="google">
+                        Google
+                    </button>
+                </div>
+
+                <!-- Email Auth Form -->
+                <form id="emailAuthForm" class="auth-form">
+                    <div id="usernameFieldEmail" class="hidden">
+                        <input type="text" id="usernameEmail" placeholder="Nom d'utilisateur" class="auth-input" required>
+                    </div>
+                    <input type="email" id="email" placeholder="Email" class="auth-input" required>
+                    <input type="password" id="password" placeholder="Mot de passe" class="auth-input" required>
+                    
+                    <!-- Color Picker -->
+                    <div class="color-picker-container">
+                        <label class="color-picker-label">Couleur de votre chat:</label>
+                        <div class="color-options">
+                            <button type="button" class="color-option active" data-color="#1EA7FF" style="background: #1EA7FF;"></button>
+                            <button type="button" class="color-option" data-color="#10B981" style="background: #10B981;"></button>
+                            <button type="button" class="color-option" data-color="#F59E0B" style="background: #F59E0B;"></button>
+                            <button type="button" class="color-option" data-color="#EF4444" style="background: #EF4444;"></button>
+                            <button type="button" class="color-option" data-color="#8B5CF6" style="background: #8B5CF6;"></button>
+                            <button type="button" class="color-option" data-color="#EC4899" style="background: #EC4899;"></button>
+                        </div>
+                        <input type="hidden" id="userColorEmail" value="#1EA7FF">
+                    </div>
+                    
+                    <button type="submit" class="auth-submit-btn">
+                        <span id="emailAuthBtnText">Se connecter</span>
+                    </button>
+                    <button type="button" id="toggleAuthMode" class="auth-toggle-btn">
+                        Créer un compte
+                    </button>
+                </form>
+
+                <!-- Phone Auth Form -->
+                <form id="phoneAuthForm" class="auth-form hidden">
+                    <input type="text" id="usernamePhone" placeholder="Nom d'utilisateur" class="auth-input" required>
+                    <input type="tel" id="phone" placeholder="+1 (849) 123-4567" class="auth-input" required>
+                    
+                    <!-- Color Picker -->
+                    <div class="color-picker-container">
+                        <label class="color-picker-label">Couleur de votre chat:</label>
+                        <div class="color-options">
+                            <button type="button" class="color-option-phone active" data-color="#1EA7FF" style="background: #1EA7FF;"></button>
+                            <button type="button" class="color-option-phone" data-color="#10B981" style="background: #10B981;"></button>
+                            <button type="button" class="color-option-phone" data-color="#F59E0B" style="background: #F59E0B;"></button>
+                            <button type="button" class="color-option-phone" data-color="#EF4444" style="background: #EF4444;"></button>
+                            <button type="button" class="color-option-phone" data-color="#8B5CF6" style="background: #8B5CF6;"></button>
+                            <button type="button" class="color-option-phone" data-color="#EC4899" style="background: #EC4899;"></button>
+                        </div>
+                        <input type="hidden" id="userColorPhone" value="#1EA7FF">
+                    </div>
+                    
+                    <button type="submit" class="auth-submit-btn">Envoyer le code</button>
+                    <div id="recaptcha-container"></div>
+                </form>
+
+                <!-- Phone Verification Form -->
+                <form id="phoneVerifyForm" class="auth-form hidden">
+                    <input type="text" id="verificationCode" placeholder="Code de vérification" class="auth-input" required>
+                    <button type="submit" class="auth-submit-btn">Vérifier</button>
+                </form>
+
+                <!-- Google Auth -->
+                <div id="googleAuthContainer" class="auth-form hidden">
+                    <input type="text" id="usernameGoogle" placeholder="Nom d'utilisateur" class="auth-input mb-4" required>
+                    
+                    <!-- Color Picker -->
+                    <div class="color-picker-container mb-4">
+                        <label class="color-picker-label">Couleur de votre chat:</label>
+                        <div class="color-options">
+                            <button type="button" class="color-option-google active" data-color="#1EA7FF" style="background: #1EA7FF;"></button>
+                            <button type="button" class="color-option-google" data-color="#10B981" style="background: #10B981;"></button>
+                            <button type="button" class="color-option-google" data-color="#F59E0B" style="background: #F59E0B;"></button>
+                            <button type="button" class="color-option-google" data-color="#EF4444" style="background: #EF4444;"></button>
+                            <button type="button" class="color-option-google" data-color="#8B5CF6" style="background: #8B5CF6;"></button>
+                            <button type="button" class="color-option-google" data-color="#EC4899" style="background: #EC4899;"></button>
+                        </div>
+                        <input type="hidden" id="userColorGoogle" value="#1EA7FF">
+                    </div>
+                    
+                    <button id="googleSignInBtn" class="auth-submit-btn bg-red-500 hover:bg-red-600">
+                        Se connecter avec Google
+                    </button>
+                </div>
+
+                <!-- Theme Selector -->
+                <div class="theme-selector">
+                    <button id="themeDark" class="theme-btn active" data-theme="dark">
+                        🌙 Dark
+                    </button>
+                    <button id="themeGlass" class="theme-btn" data-theme="glass">
+                        💎 Glass
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Screen -->
+        <div id="chatScreen" class="hidden">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <button id="backToChats" class="header-btn hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <img src="fastchat.png" alt="Logo" class="header-logo">
+                    <div>
+                        <h1 class="header-title" id="headerTitle">Fast-Chat</h1>
+                        <p class="header-subtitle" id="headerSubtitle"></p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="themeToggle" class="header-btn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                    <button id="settingsBtn" class="header-btn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Settings Panel -->
+            <div id="settingsPanel" class="settings-panel hidden">
+                <div class="settings-content">
+                    <div class="settings-item">
+                        <span class="settings-label">Utilisateur:</span>
+                        <span id="currentUsername" class="settings-value"></span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">Ma couleur:</span>
+                        <div class="color-options">
+                            <button type="button" class="color-option-settings" data-color="#1EA7FF" style="background: #1EA7FF;"></button>
+                            <button type="button" class="color-option-settings" data-color="#10B981" style="background: #10B981;"></button>
+                            <button type="button" class="color-option-settings" data-color="#F59E0B" style="background: #F59E0B;"></button>
+                            <button type="button" class="color-option-settings" data-color="#EF4444" style="background: #EF4444;"></button>
+                            <button type="button" class="color-option-settings" data-color="#8B5CF6" style="background: #8B5CF6;"></button>
+                            <button type="button" class="color-option-settings" data-color="#EC4899" style="background: #EC4899;"></button>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="settings-btn settings-btn-secondary">
+                        Déconnexion
+                    </button>
+                    <button id="deleteAccountBtn" class="settings-btn settings-btn-danger">
+                        Supprimer le compte
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat List View -->
+            <div id="chatListView" class="chat-list-view">
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" id="searchUserInput" placeholder="Rechercher un utilisateur..." class="search-input">
+                    <button id="searchUserBtn" class="search-btn">Chercher</button>
+                </div>
+
+                <!-- Search Results -->
+                <div id="searchResults" class="search-results hidden"></div>
+
+                <!-- New Group Button -->
+                <button id="newGroupBtn" class="new-group-btn">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Créer un groupe
+                </button>
+
+                <!-- Chat List -->
+                <div id="chatList" class="chat-list"></div>
+            </div>
+
+            <!-- Chat Conversation View -->
+            <div id="chatConversationView" class="chat-conversation-view hidden">
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="messages-container"></div>
+
+                <!-- Leave Group Button (for groups only) -->
+                <button id="leaveGroupBtn" class="leave-group-btn hidden">
+                    Quitter le groupe
+                </button>
+
+                <!-- Message Input -->
+                <div class="message-input-container">
+                    <button id="emojiBtn" class="emoji-btn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <input type="text" id="messageInput" placeholder="Tapez un message..." class="message-input">
+                    <button id="sendBtn" class="send-btn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Emoji Picker -->
+                <div id="emojiPicker" class="emoji-picker hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Group Modal -->
+    <div id="newGroupModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Créer un groupe</h2>
+                <button id="closeGroupModal" class="modal-close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="newGroupForm">
+                <input type="text" id="groupNameInput" placeholder="Nom du groupe" class="modal-input" required>
+                <button type="submit" class="modal-btn">Créer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module" src="app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker enregistré avec succès:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Erreur d\'enregistrement du Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
