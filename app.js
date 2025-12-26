@@ -1,19 +1,3 @@
-// Demander la permission pour les notifications
-if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-}
-
-// Dans loadMessages(), après la réception d'un message
-if (messageData.senderId !== currentUser.uid && 
-    Notification.permission === 'granted' && 
-    document.hidden) {
-    
-    new Notification('Fast-Chat', {
-        body: `${messageData.senderName}: ${messageData.text}`,
-        icon: 'fastchat.png',
-        tag: 'message-notification'
-    });
-}
 
 // Import Firebase modules
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
@@ -895,6 +879,22 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func(...args), wait);
     };
+}
+// Demander la permission pour les notifications
+if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+}
+
+// Dans loadMessages(), après la réception d'un message
+if (messageData.senderId !== currentUser.uid && 
+    Notification.permission === 'granted' && 
+    document.hidden) {
+    
+    new Notification('Fast-Chat', {
+        body: `${messageData.senderName}: ${messageData.text}`,
+        icon: 'fastchat.png',
+        tag: 'message-notification'
+    });
 }
 
 // Load saved theme
