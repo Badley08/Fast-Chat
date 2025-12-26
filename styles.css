@@ -21,6 +21,10 @@ body {
     overflow-x: hidden;
 }
 
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 /* Dark Theme */
 body.theme-dark {
     background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
@@ -1007,5 +1011,47 @@ body.theme-glass::before {
         left: 20px;
         right: 20px;
     }
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px); /* Vient de la gauche */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Pour messages propres (de droite) */
+.message.own {
+    animation: messageInRight 0.3s ease;
+}
+
+@keyframes messageInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Mode compact */
+body.compact-mode .message-bubble {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+body.compact-mode .chat-item {
+    padding: 10px;
+}
+
+body.compact-mode .header-logo {
+    width: 30px;
+    height: 30px;
 }
 
