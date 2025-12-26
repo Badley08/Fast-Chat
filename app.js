@@ -856,6 +856,47 @@ function renderEmojiPicker() {
     emojiPicker.appendChild(emojiGrid);
 }
 
+// Quand l'utilisateur tape
+messageInput.addEventListener('input', debounce(() => {
+    if (currentChat) {
+        setDoc(doc(db, 'typing', currentChat.id), {
+            [currentUser.uid]: true
+        }, { merge: true });
+        
+        // Supprimer après 3 secondes
+        setTimeout(() => {
+            updateDoc(doc(db, 'typing', currentChat.id), {
+                [currentUser.uid]: false
+            });
+        }, 3000);
+    }
+}, 300));
+
+// Écouter les indicateurs de frappe
+onSnapshot(doc(db, 'typing', currentChat.id), (doc) => {
+    if (doc.exists()) {
+        const data = doc.data();
+        const isOtherUserTyping = Object.entries(data).some(
+            ([uid, isTyping]) => uid !== currentUser.uid && isTyping
+        );
+        
+        if (isOtherUserTyping) {
+            headerSubtitle.textContent = 'En train d\'écrire...';
+        } else {
+            headerSubtitle.textContent = 'En ligne';
+        }
+    }
+});
+
+// Fonction utilitaire debounce
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
 // Load saved theme
 const savedTheme = localStorage.getItem('fastchat-theme') || 'dark';
 setTheme(savedTheme);
