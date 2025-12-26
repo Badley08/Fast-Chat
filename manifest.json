@@ -2,7 +2,7 @@
   "name": "Fast-Chat",
   "short_name": "Fast-Chat",
   "description": "Application de chat rapide et simple par Luberisse Karl Brad",
-  "start_url": "/",
+  "start_url": "/Fast-Chat",
   "display": "standalone",
   "background_color": "#0F172A",
   "theme_color": "#1EA7FF",
