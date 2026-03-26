@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0A0E1A">
+
+    <!-- ═══ SEO Primary ═══ -->
+    <title>Fast-Chat — Messagerie instantanée rapide &amp; sécurisée</title>
+    <meta name="description" content="Fast-Chat est une application de messagerie instantanée moderne, rapide et sécurisée. Chattez avec vos amis, créez des groupes, envoyez des messages en temps réel — disponible sur mobile et bureau.">
+    <meta name="keywords" content="fast-chat, messagerie instantanée, chat en temps réel, application de chat, groupes de discussion, messagerie sécurisée, firebase chat, PWA messaging">
+    <meta name="author" content="Luberisse Karl Brad">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://fastchat-b0c51.web.app/">
+
+    <!-- ═══ Open Graph (Facebook, LinkedIn, WhatsApp previews) ═══ -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Fast-Chat">
+    <meta property="og:title" content="Fast-Chat — Messagerie instantanée rapide &amp; sécurisée">
+    <meta property="og:description" content="Chattez en temps réel avec vos amis et collègues. Groupes, messages privés, avatars personnalisés — Fast-Chat rend la communication simple et élégante.">
+    <meta property="og:image" content="https://fastchat-b0c51.web.app/fastchat.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://fastchat-b0c51.web.app/">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- ═══ Twitter Card ═══ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fast-Chat — Messagerie instantanée rapide &amp; sécurisée">
+    <meta name="twitter:description" content="Chattez en temps réel avec vos amis et collègues. Groupes, messages privés, avatars personnalisés.">
+    <meta name="twitter:image" content="https://fastchat-b0c51.web.app/fastchat.png">
+
+    <!-- ═══ PWA & Mobile ═══ -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="fastchat.png">
+    <link rel="shortcut icon" href="fastchat.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fast-Chat">
+    <link rel="apple-touch-icon" href="fastchat.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Fast-Chat">
+
+    <!-- ═══ Structured Data (JSON-LD) ═══ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Fast-Chat",
+      "description": "Application de messagerie instantanée rapide, sécurisée et élégante. Chat en temps réel, groupes, avatars personnalisés.",
+      "url": "https://fastchat-b0c51.web.app/",
+      "logo": "https://fastchat-b0c51.web.app/fastchat.png",
+      "applicationCategory": "CommunicationApplication",
+      "operatingSystem": "Web, Android, iOS",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": {
+        "@type": "Person",
+        "name": "Luberisse Karl Brad"
+      },
+      "featureList": [
+        "Messagerie instantanée en temps réel",
+        "Groupes de discussion",
+        "Avatars avec icônes et couleurs personnalisées",
+        "Répondre aux messages",
+        "Suppression de messages",
+        "Notifications push",
+        "Mode sombre et glassmorphisme"
+      ],
+      "inLanguage": ["fr", "en"]
+    }
+    </script>
+
+    <!-- ═══ Fonts ═══ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ═══ Lordicon animated icons ═══ -->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+
+    <!-- ═══ Custom Styles ═══ -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SPLASH SCREEN
+════════════════════════════════════════════ -->
+<div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+        <div class="splash-icon-wrap">
+            <lord-icon src="https://cdn.lordicon.com/wloilxuq.json"
+                trigger="loop" colors="primary:#ffffff,secondary:#4FC3F7"
+                style="width:100px;height:100px">
+            </lord-icon>
+        </div>
+        <h1 class="splash-title">Fast-Chat</h1>
+        <p class="splash-subtitle">by Luberisse Karl Brad</p>
+        <div class="splash-loader"></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════════ -->
+<div id="app" class="hidden">
+
+    <!-- ─── AUTH SCREEN ─── -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo-wrap">
+                    <lord-icon src="https://cdn.lordicon.com/wloilxuq.json"
+                        trigger="loop" colors="primary:#ffffff,secondary:#4FC3F7"
+                        style="width:60px;height:60px">
+                    </lord-icon>
+                </div>
+                <h1 class="auth-title">Fast-Chat</h1>
+                <p class="auth-description">Messagerie rapide &amp; sécurisée</p>
+            </div>
+
+            <!-- Auth Mode Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-mode="email">
+                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json"
+                        trigger="hover" colors="primary:currentColor"
+                        style="width:20px;height:20px">
+                    </lord-icon>
+                    Email
+                </button>
+                <button class="auth-tab" data-mode="phone">
+                    <lord-icon src="https://cdn.lordicon.com/srsgifqc.json"
+                        trigger="hover" colors="primary:currentColor"
+                        style="width:20px;height:20px">
+                    </lord-icon>
+                    Téléphone
+                </button>
+                <button class="auth-tab" data-mode="google">
+                    <lord-icon src="https://cdn.lordicon.com/xcrjfuzb.json"
+                        trigger="hover" colors="primary:currentColor"
+                        style="width:20px;height:20px">
+                    </lord-icon>
+                    Google
+                </button>
+            </div>
+
+            <!-- Email Form -->
+            <form id="emailAuthForm" class="auth-form">
+                <div id="usernameFieldEmail" class="hidden">
+                    <input type="text" id="usernameEmail" placeholder="Nom d'utilisateur" class="auth-input" autocomplete="username">
+                </div>
+                <input type="email" id="email" placeholder="Adresse email" class="auth-input" autocomplete="email">
+                <input type="password" id="password" placeholder="Mot de passe" class="auth-input" autocomplete="current-password">
+
+                <!-- Avatar Picker (shown on register only) -->
+                <div id="avatarPickerEmail" class="avatar-picker hidden">
+                    <label class="picker-label">
+                        <lord-icon src="https://cdn.lordicon.com/dxjqoygy.json"
+                            trigger="hover" colors="primary:#94A3B8"
+                            style="width:16px;height:16px">
+                        </lord-icon>
+                        Votre avatar
+                    </label>
+                    <div class="avatar-icons-grid" id="avatarIconsEmail"></div>
+                    <label class="picker-label mt-8">
+                        <lord-icon src="https://cdn.lordicon.com/hbathvnb.json"
+                            trigger="hover" colors="primary:#94A3B8"
+                            style="width:16px;height:16px">
+                        </lord-icon>
+                        Couleur d'accentuation
+                    </label>
+                    <div class="color-swatches" id="colorSwatchesEmail"></div>
+                    <input type="hidden" id="userColorEmail" value="#1EA7FF">
+                    <input type="hidden" id="userIconEmail" value="person">
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span id="emailAuthBtnText">Se connecter</span>
+                </button>
+                <button type="button" id="toggleAuthMode" class="btn-ghost">Créer un compte</button>
+            </form>
+
+            <!-- Phone Form -->
+            <form id="phoneAuthForm" class="auth-form hidden">
+                <input type="text" id="usernamePhone" placeholder="Nom d'utilisateur" class="auth-input">
+                <input type="tel" id="phone" placeholder="+1 (849) 123-4567" class="auth-input">
+                <div class="avatar-picker">
+                    <label class="picker-label">Couleur d'accentuation</label>
+                    <div class="color-swatches" id="colorSwatchesPhone"></div>
+                    <input type="hidden" id="userColorPhone" value="#1EA7FF">
+                    <input type="hidden" id="userIconPhone" value="person">
+                </div>
+                <button type="submit" class="btn-primary">Envoyer le code</button>
+                <div id="recaptcha-container"></div>
+            </form>
+
+            <!-- Phone Verify Form -->
+            <form id="phoneVerifyForm" class="auth-form hidden">
+                <input type="text" id="verificationCode" placeholder="Code de vérification" class="auth-input">
+                <button type="submit" class="btn-primary">Vérifier</button>
+            </form>
+
+            <!-- Google Auth -->
+            <div id="googleAuthContainer" class="auth-form hidden">
+                <input type="text" id="usernameGoogle" placeholder="Nom d'utilisateur" class="auth-input">
+                <div class="avatar-picker">
+                    <label class="picker-label">Couleur d'accentuation</label>
+                    <div class="color-swatches" id="colorSwatchesGoogle"></div>
+                    <input type="hidden" id="userColorGoogle" value="#1EA7FF">
+                    <input type="hidden" id="userIconGoogle" value="person">
+                </div>
+                <button id="googleSignInBtn" class="btn-google">
+                    <lord-icon src="https://cdn.lordicon.com/xcrjfuzb.json"
+                        trigger="hover" colors="primary:#ffffff"
+                        style="width:22px;height:22px">
+                    </lord-icon>
+                    Continuer avec Google
+                </button>
+            </div>
+
+            <!-- Theme toggle -->
+            <div class="auth-theme-row">
+                <button class="theme-pill active" data-theme="dark">
+                    <lord-icon src="https://cdn.lordicon.com/abfverha.json"
+                        trigger="hover" colors="primary:currentColor"
+                        style="width:16px;height:16px">
+                    </lord-icon>
+                    Sombre
+                </button>
+                <button class="theme-pill" data-theme="glass">
+                    <lord-icon src="https://cdn.lordicon.com/hpivxauj.json"
+                        trigger="hover" colors="primary:currentColor"
+                        style="width:16px;height:16px">
+                    </lord-icon>
+                    Verre
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── CHAT SCREEN ─── -->
+    <div id="chatScreen" class="chat-screen hidden">
+
+        <!-- ── SIDEBAR (chat list) ── -->
+        <aside id="sidebarPanel" class="sidebar">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <div class="sidebar-user" id="sidebarUserInfo">
+                    <div class="avatar sm" id="sidebarAvatar"></div>
+                    <span id="sidebarUsername" class="sidebar-username"></span>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="icon-btn" id="newGroupBtn" title="Nouveau groupe">
+                        <lord-icon src="https://cdn.lordicon.com/osuxyevn.json"
+                            trigger="hover" colors="primary:#94A3B8"
+                            style="width:24px;height:24px">
+                        </lord-icon>
+                    </button>
+                    <button class="icon-btn" id="settingsBtn" title="Paramètres">
+                        <lord-icon src="https://cdn.lordicon.com/hwjcdycb.json"
+                            trigger="hover" colors="primary:#94A3B8"
+                            style="width:24px;height:24px">
+                        </lord-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="search-bar-wrap">
+                <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json"
+                    trigger="hover" colors="primary:#64748B"
+                    style="width:18px;height:18px;flex-shrink:0">
+                </lord-icon>
+                <input type="text" id="searchUserInput" placeholder="Rechercher ou démarrer une discussion" class="search-bar-input">
+                <button class="icon-btn search-clear hidden" id="searchClearBtn">
+                    <lord-icon src="https://cdn.lordicon.com/nqtddedc.json"
+                        trigger="hover" colors="primary:#64748B"
+                        style="width:16px;height:16px">
+                    </lord-icon>
+                </button>
+            </div>
+
+            <!-- Search Results -->
+            <div id="searchResults" class="search-results hidden"></div>
+
+            <!-- Chat List -->
+            <div id="chatList" class="chat-list"></div>
+        </aside>
+
+        <!-- ── CONVERSATION PANEL ── -->
+        <main id="conversationPanel" class="conversation-panel hidden-mobile">
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <lord-icon src="https://cdn.lordicon.com/wloilxuq.json"
+                    trigger="loop" colors="primary:#334155,secondary:#475569"
+                    style="width:120px;height:120px">
+                </lord-icon>
+                <h2>Fast-Chat Web</h2>
+                <p>Sélectionnez une conversation pour commencer à chatter</p>
+            </div>
+
+            <!-- Active chat (hidden until a chat is opened) -->
+            <div id="activeChat" class="hidden" style="display:flex;flex-direction:column;height:100%;">
+
+                <!-- Convo Header -->
+                <div class="convo-header">
+                    <button class="icon-btn back-btn" id="backToChats">
+                        <lord-icon src="https://cdn.lordicon.com/iiixbhcm.json"
+                            trigger="hover" colors="primary:#94A3B8"
+                            style="width:24px;height:24px">
+                        </lord-icon>
+                    </button>
+                    <div class="convo-header-info" id="convoHeaderInfo">
+                        <div class="avatar sm" id="convoAvatar"></div>
+                        <div>
+                            <div class="convo-name" id="convoName"></div>
+                            <div class="convo-status" id="convoStatus"></div>
+                        </div>
+                    </div>
+                    <div class="convo-header-actions">
+                        <button class="icon-btn" id="convoSearchBtn" title="Rechercher">
+                            <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json"
+                                trigger="hover" colors="primary:#94A3B8"
+                                style="width:22px;height:22px">
+                            </lord-icon>
+                        </button>
+                        <button class="icon-btn" id="convoMenuBtn" title="Plus d'options">
+                            <lord-icon src="https://cdn.lordicon.com/ymfjcmnu.json"
+                                trigger="hover" colors="primary:#94A3B8"
+                                style="width:22px;height:22px">
+                            </lord-icon>
+                        </button>
+                    </div>
+                    <!-- Dropdown menu -->
+                    <div class="convo-dropdown hidden" id="convoDropdown">
+                        <button class="dropdown-item" id="viewGroupInfoBtn">
+                            <lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="hover" colors="primary:#94A3B8" style="width:18px;height:18px"></lord-icon>
+                            Infos du groupe
+                        </button>
+                        <button class="dropdown-item" id="leaveGroupBtn">
+                            <lord-icon src="https://cdn.lordicon.com/skkahier.json" trigger="hover" colors="primary:#EF4444" style="width:18px;height:18px"></lord-icon>
+                            <span style="color:#EF4444">Quitter le groupe</span>
+                        </button>
+                        <button class="dropdown-item" id="clearChatBtn">
+                            <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json" trigger="hover" colors="primary:#94A3B8" style="width:18px;height:18px"></lord-icon>
+                            Effacer la discussion
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Reply preview bar -->
+                <div class="reply-bar hidden" id="replyBar">
+                    <div class="reply-bar-line"></div>
+                    <div class="reply-bar-content">
+                        <div class="reply-bar-author" id="replyBarAuthor"></div>
+                        <div class="reply-bar-text" id="replyBarText"></div>
+                    </div>
+                    <button class="icon-btn" id="cancelReplyBtn">
+                        <lord-icon src="https://cdn.lordicon.com/nqtddedc.json" trigger="hover" colors="primary:#64748B" style="width:18px;height:18px"></lord-icon>
+                    </button>
+                </div>
+
+                <!-- Messages -->
+                <div id="messagesContainer" class="messages-container"></div>
+
+                <!-- Typing indicator -->
+                <div class="typing-indicator hidden" id="typingIndicator">
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span id="typingText" class="typing-label"></span>
+                </div>
+
+                <!-- Message Input -->
+                <div class="message-input-row">
+                    <button class="icon-btn attach-btn" id="attachBtn">
+                        <lord-icon src="https://cdn.lordicon.com/lzgqzxrq.json"
+                            trigger="hover" colors="primary:#64748B"
+                            style="width:24px;height:24px">
+                        </lord-icon>
+                    </button>
+                    <div class="message-input-wrap">
+                        <input type="text" id="messageInput" class="message-input" placeholder="Message...">
+                    </div>
+                    <button class="send-btn" id="sendBtn">
+                        <lord-icon src="https://cdn.lordicon.com/nzixoeyz.json"
+                            trigger="hover" colors="primary:#ffffff"
+                            style="width:22px;height:22px">
+                        </lord-icon>
+                    </button>
+                </div>
+
+            </div><!-- /activeChat -->
+        </main><!-- /conversationPanel -->
+
+    </div><!-- /chatScreen -->
+
+</div><!-- /app -->
+
+<!-- ═══════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════ -->
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-header-row">
+            <h2 class="modal-title">Paramètres</h2>
+            <button class="icon-btn" id="closeSettingsModal">
+                <lord-icon src="https://cdn.lordicon.com/nqtddedc.json" trigger="hover" colors="primary:#94A3B8" style="width:24px;height:24px"></lord-icon>
+            </button>
+        </div>
+        <!-- Profile -->
+        <div class="settings-profile-row">
+            <div class="avatar lg" id="settingsAvatar"></div>
+            <div>
+                <div class="settings-username" id="settingsUsername"></div>
+                <div class="settings-email" id="settingsEmail"></div>
+            </div>
+        </div>
+        <!-- Color -->
+        <div class="settings-section">
+            <label class="settings-label">Couleur d'accentuation</label>
+            <div class="color-swatches" id="colorSwatchesSettings"></div>
+        </div>
+        <!-- Icon -->
+        <div class="settings-section">
+            <label class="settings-label">Icône d'avatar</label>
+            <div class="avatar-icons-grid sm" id="avatarIconsSettings"></div>
+        </div>
+        <!-- Theme -->
+        <div class="settings-section">
+            <label class="settings-label">Thème</label>
+            <div class="theme-row">
+                <button class="theme-pill active" data-theme="dark" id="settingsThemeDark">
+                    <lord-icon src="https://cdn.lordicon.com/abfverha.json" trigger="hover" colors="primary:currentColor" style="width:16px;height:16px"></lord-icon>
+                    Sombre
+                </button>
+                <button class="theme-pill" data-theme="glass" id="settingsThemeGlass">
+                    <lord-icon src="https://cdn.lordicon.com/hpivxauj.json" trigger="hover" colors="primary:currentColor" style="width:16px;height:16px"></lord-icon>
+                    Verre
+                </button>
+            </div>
+        </div>
+        <!-- Actions -->
+        <div class="settings-section">
+            <button class="btn-outline" id="logoutBtn">
+                <lord-icon src="https://cdn.lordicon.com/skkahier.json" trigger="hover" colors="primary:#94A3B8" style="width:20px;height:20px"></lord-icon>
+                Déconnexion
+            </button>
+            <button class="btn-danger" id="deleteAccountBtn">
+                <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json" trigger="hover" colors="primary:#ffffff" style="width:20px;height:20px"></lord-icon>
+                Supprimer le compte
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- New Group Modal -->
+<div id="newGroupModal" class="modal-overlay hidden">
+    <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-header-row">
+            <h2 class="modal-title">Nouveau groupe</h2>
+            <button class="icon-btn" id="closeGroupModal">
+                <lord-icon src="https://cdn.lordicon.com/nqtddedc.json" trigger="hover" colors="primary:#94A3B8" style="width:24px;height:24px"></lord-icon>
+            </button>
+        </div>
+        <form id="newGroupForm">
+            <div class="modal-input-wrap">
+                <lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="hover" colors="primary:#64748B" style="width:20px;height:20px;flex-shrink:0"></lord-icon>
+                <input type="text" id="groupNameInput" placeholder="Nom du groupe" class="modal-input" required>
+            </div>
+            <!-- Add members search -->
+            <div class="group-members-section">
+                <label class="settings-label">Ajouter des membres</label>
+                <div class="modal-input-wrap">
+                    <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json" trigger="hover" colors="primary:#64748B" style="width:18px;height:18px;flex-shrink:0"></lord-icon>
+                    <input type="text" id="groupMemberSearch" placeholder="Rechercher un utilisateur..." class="modal-input">
+                </div>
+                <div id="groupMemberResults" class="member-results hidden"></div>
+                <div id="selectedMembers" class="selected-members"></div>
+            </div>
+            <button type="submit" class="btn-primary mt-12">
+                <lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="hover" colors="primary:#ffffff" style="width:20px;height:20px"></lord-icon>
+                Créer le groupe
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Group Info Modal -->
+<div id="groupInfoModal" class="modal-overlay hidden">
+    <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-header-row">
+            <h2 class="modal-title">Infos du groupe</h2>
+            <button class="icon-btn" id="closeGroupInfoModal">
+                <lord-icon src="https://cdn.lordicon.com/nqtddedc.json" trigger="hover" colors="primary:#94A3B8" style="width:24px;height:24px"></lord-icon>
+            </button>
+        </div>
+        <div id="groupInfoContent"></div>
+        <div class="settings-section">
+            <button class="btn-primary" id="addMemberBtn">
+                <lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="hover" colors="primary:#ffffff" style="width:20px;height:20px"></lord-icon>
+                Ajouter un membre
+            </button>
+        </div>
+        <div id="addMemberSection" class="hidden">
+            <div class="modal-input-wrap">
+                <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json" trigger="hover" colors="primary:#64748B" style="width:18px;height:18px;flex-shrink:0"></lord-icon>
+                <input type="text" id="addMemberSearch" placeholder="Rechercher un utilisateur..." class="modal-input">
+            </div>
+            <div id="addMemberResults" class="member-results hidden"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Context Menu (message actions) -->
+<div id="contextMenu" class="context-menu hidden">
+    <button class="context-item" id="ctxReply">
+        <lord-icon src="https://cdn.lordicon.com/ogkflacg.json" trigger="hover" colors="primary:#94A3B8" style="width:18px;height:18px"></lord-icon>
+        Répondre
+    </button>
+    <button class="context-item" id="ctxCopy">
+        <lord-icon src="https://cdn.lordicon.com/depeqmsz.json" trigger="hover" colors="primary:#94A3B8" style="width:18px;height:18px"></lord-icon>
+        Copier
+    </button>
+    <button class="context-item ctx-danger hidden" id="ctxDelete">
+        <lord-icon src="https://cdn.lordicon.com/jmkrnisz.json" trigger="hover" colors="primary:#EF4444" style="width:18px;height:18px"></lord-icon>
+        <span style="color:#EF4444">Supprimer</span>
+    </button>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- Firebase -->
+<script type="module" src="app.js"></script>
+
+<!-- Service Worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .catch(err => console.log('SW error:', err));
+        });
+    }
+</script>
+</body>
+</html>
